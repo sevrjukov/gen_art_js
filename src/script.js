@@ -54,25 +54,29 @@ for (var i = 0; i < numBlocks; i++) {
 
 
     const geometry = new THREE.BoxGeometry(blockWidth, boxHeight, blockWidth);
-    const material = new THREE.MeshBasicMaterial( { color: "#006e80" } );
+    const material = new THREE.MeshBasicMaterial({color: "#000000"});
 
-    const box = new THREE.Mesh( geometry, material );
+    const box = new THREE.Mesh(geometry, material);
 
     var geometryLines = new THREE.EdgesGeometry(geometry); // or WireframeGeometry
-    var materialLines = new THREE.LineBasicMaterial( { color: "#FFFFFF", linewidth: 1 } );
-    var edges = new THREE.LineSegments( geometryLines, materialLines );
-    box.add( edges ); // add wireframe as a child of the parent mesh
+    var materialLines = new THREE.LineDashedMaterial({color: "#ffffff", linewidth: 1});
+    var edges = new THREE.LineSegments(geometryLines, materialLines);
+    box.add(edges); // add wireframe as a child of the parent mesh
 
     positionBox(box, xIndex, zIndex, boxHeight);
+
 }
+
 
 
 function positionBox(box, xIndex, zIndex, boxHeight) {
+    box.position.y = boxHeight / 2;
     box.position.x = xIndex * (blockWidth + blockSpacing);
     box.position.z = zIndex * (blockWidth + blockSpacing);
-    box.position.y = boxHeight / 2;
     scene.add(box);
 }
+
+
 
 const pointLight = new THREE.PointLight(0xFFFFFF);
 pointLight.position.set(30, 30, 10);
@@ -85,14 +89,19 @@ const gridHelper = new THREE.GridHelper(200, 100, "#ffb1b1");
 // scene.add(gridHelper)
 
 
-camera.position.set(18, 7, 22);
-camera.rotation.set(0, 0.7, 0)
+camera.position.set(15, 6, 28);
+camera.rotation.set(0, 0.4, 0)
 
+var framesCounter = 100;
 
 function animate() {
-    // requestAnimationFrame(animate);
+    if (framesCounter > 0) {
+        requestAnimationFrame(animate);
+    }
 
-    camera.rotation.y += 0.001;
+
+    framesCounter--;
+    // camera.rotation.y += 0.001;
     renderer.render(scene, camera);
     document.getElementById("camera_y").value = camera.rotation.y;
 }
